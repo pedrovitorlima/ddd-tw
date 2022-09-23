@@ -10,15 +10,23 @@ import java.util.stream.Collectors;
 public class Cart {
 
     private List<Item> items = new ArrayList<>();
+    private List<String> removedItemNames = new ArrayList<>();
+
 
     public void addItem(Item item) {
         items.add( item);
     }
 
     public void removeItem(String productName) {
-        items = items.stream()
+        List<Item> filteredList = items.stream()
                 .filter(product -> !product.getProduct().getName().equals(productName))
                 .collect(Collectors.toList());
+
+        if (!filteredList.equals(items)) {
+            removedItemNames.add(productName);
+        }
+
+        items = filteredList;
     }
 }
 
