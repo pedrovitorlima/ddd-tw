@@ -10,8 +10,8 @@ public class Cart {
 
     private List<Item> items = new ArrayList<>();
 
-    public void addItem(Product product, Integer quantity) {
-        items.add( new Item(product, quantity));
+    public void addItem(Item item) {
+        items.add( item);
     }
 
     public void removeItem(String productName) {

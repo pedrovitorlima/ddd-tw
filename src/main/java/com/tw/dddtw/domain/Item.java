@@ -10,4 +10,9 @@ import lombok.Getter;
 public class Item {
     private Product product;
     private Integer quantity;
+
+    public Item(String productName, Integer quantity) {
+        this.product = new Product(productName);
+        this.quantity = quantity;
+    }
 }

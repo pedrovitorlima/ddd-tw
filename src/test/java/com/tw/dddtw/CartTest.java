@@ -38,6 +38,10 @@ class CartTest {
         );
     }
 
+    private void addItemWith(String productName, Integer quantity) {
+        cart.addItem( new Item(productName, quantity));
+    }
+
     @Test
     void shouldRemoveIpadProGivenQuantity() {
         addItemWith("IPAD_PRO", null);
@@ -45,9 +49,5 @@ class CartTest {
 
         cart.removeItem("IPAD PRO");
         assertThat(cart.getItems()).doesNotContain(item);
-    }
-
-    private void addItemWith(String productName, Integer quantity) {
-        cart.addItem( new Product(productName), quantity);
     }
 }
