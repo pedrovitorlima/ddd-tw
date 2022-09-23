@@ -19,7 +19,7 @@ class CartTest {
     private Cart cart;
     @BeforeEach
     void setup() {
-        this.cart = new Cart();
+        this.cart = new Cart(1);
     }
 
     @ParameterizedTest
@@ -55,10 +55,22 @@ class CartTest {
     @Test
     void shouldNotAddProductToListOfRemovedOnesGivenItWasNotRemovedBefore() {
         addItemWith("IPAD PRO", null);
-        Item item = new Item(new Product("does not exist"), null);
 
         cart.removeItem("does not exist");
         assertThat(cart.getRemovedItemNames()).doesNotContain("IPAD PRO");
+    }
+
+    @Test
+    void should() {
+        Cart anotherCart = new Cart(2);
+
+        Item item = new Item(new Product("IPAD PRO"), null);
+
+        cart.addItem(item);
+        anotherCart.addItem(item);
+
+        assertThat(cart).isNotEqualTo(anotherCart);
+
     }
 
     private static Stream<Arguments> shouldAddAProduct_params() {

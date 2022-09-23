@@ -9,9 +9,13 @@ import java.util.stream.Collectors;
 @Getter
 public class Cart {
 
+    private int id;
     private List<Item> items = new ArrayList<>();
     private List<String> removedItemNames = new ArrayList<>();
 
+    public Cart(int id) {
+        this.id = id;
+    }
 
     public void addItem(Item item) {
         items.add( item);
