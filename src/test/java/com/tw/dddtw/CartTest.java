@@ -44,7 +44,7 @@ class CartTest {
 
     @Test
     void shouldRemoveIpadProGivenQuantity() {
-        addItemWith("IPAD_PRO", null);
+        addItemWith("IPAD PRO", null);
         Item item = new Item(new Product("IPAD PRO"), null);
 
         cart.removeItem("IPAD PRO");
