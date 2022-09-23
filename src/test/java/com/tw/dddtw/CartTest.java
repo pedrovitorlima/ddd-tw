@@ -1,7 +1,15 @@
 package com.tw.dddtw;
 
+import com.tw.dddtw.domain.Cart;
+import com.tw.dddtw.domain.Item;
+import com.tw.dddtw.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,25 +21,33 @@ class CartTest {
         this.cart = new Cart();
     }
 
-    @Test
-    void shouldAddIpadProToCard(){
-        cart.addProduct(Product.IPAD_PRO);
+    @ParameterizedTest
+    @MethodSource("shouldAddAProduct_params")
+    void shouldAddAProduct(String productName, Integer quantity) {
+        addItemWith(productName, quantity);
 
-        assertThat(cart.getProducts().containsKey(Product.IPAD_PRO));
+        Item item = new Item(new Product(productName), quantity);
+        assertThat(cart.getItems().contains(item));
+    }
+
+    private static Stream<Arguments> shouldAddAProduct_params() {
+        return Stream.of(
+                Arguments.of("IPAD_PRO", null),
+                Arguments.of("HERO_INK", null),
+                Arguments.of("CRICKET_BAT", 2)
+        );
     }
 
     @Test
-    void shouldAddProductToCart(){
-        cart.addProduct(Product.HERO_INK);
+    void shouldRemoveIpadProGivenQuantity() {
+        addItemWith("IPAD_PRO", null);
+        Item item = new Item(new Product("IPAD PRO"), null);
 
-        assertThat(cart.getProducts()).containsKey(Product.HERO_INK);
+        cart.removeItem("IPAD PRO");
+        assertThat(cart.getItems()).doesNotContain(item);
     }
 
-    @Test
-    void shouldAddCricketBatWith2Units() {
-        final Integer amountOfCricketBats = 2;
-        cart.addProduct(Product.CRICKET_BAT, amountOfCricketBats);
-
-        assertThat(cart.getProducts().get(Product.CRICKET_BAT)).isEqualTo(amountOfCricketBats);
+    private void addItemWith(String productName, Integer quantity) {
+        cart.addItem( new Product(productName), quantity);
     }
 }
