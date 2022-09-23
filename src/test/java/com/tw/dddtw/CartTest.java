@@ -9,6 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Currency;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -24,17 +25,19 @@ class CartTest {
 
     @ParameterizedTest
     @MethodSource("shouldAddAProduct_params")
-    void shouldAddAProduct(String productName, Integer quantity) {
+    void shouldAddAProduct(String productName, Integer quantity, Price price) {
         addItemWith(productName, quantity);
 
-        Item item = new Item(new Product(productName), quantity);
+        Product product = new Product(productName, price);
+        Item item = new Item(product, quantity);
         assertThat(cart.getItems().contains(item));
     }
 
     @Test
     void shouldRemoveIpadProGivenQuantity() {
         addItemWith("IPAD PRO", null);
-        Item item = new Item(new Product("IPAD PRO"), null);
+        Product ipadPro = new Product("IPAD PRO", localPrice());
+        Item item = new Item(ipadPro, null);
 
         cart.removeItem("IPAD PRO");
         assertThat(cart.getItems()).doesNotContain(item);
@@ -42,7 +45,7 @@ class CartTest {
 
     @Test
     void shouldReturnAListOfRemovedItemNames(){
-        Item item = new Item(new Product("IPAD PRO"), null);
+        Item item = new Item(new Product("IPAD PRO", localPrice()), null);
 
         cart.addItem(item);
         cart.removeItem("IPAD PRO");
@@ -64,7 +67,7 @@ class CartTest {
     void should() {
         Cart anotherCart = new Cart(2);
 
-        Item item = new Item(new Product("IPAD PRO"), null);
+        Item item = new Item(new Product("IPAD PRO", localPrice()), null);
 
         cart.addItem(item);
         anotherCart.addItem(item);
@@ -75,13 +78,20 @@ class CartTest {
 
     private static Stream<Arguments> shouldAddAProduct_params() {
         return Stream.of(
-                Arguments.of("IPAD_PRO", null),
-                Arguments.of("HERO_INK", null),
-                Arguments.of("CRICKET_BAT", 2)
+                Arguments.of("IPAD_PRO", null, localPrice()),
+                Arguments.of("HERO_INK", null, localPrice()),
+                Arguments.of("CRICKET_BAT", 2, localPrice())
         );
     }
 
     private void addItemWith(String productName, Integer quantity) {
-        cart.addItem( new Item(productName, quantity));
+        Price price = localPrice();
+
+        Product product = new Product(productName, price);
+        cart.addItem( new Item(product, quantity));
+    }
+
+    private static Price localPrice() {
+        return new Price(Currency.getInstance("USD"));
     }
 }

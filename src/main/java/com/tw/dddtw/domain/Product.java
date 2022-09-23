@@ -1,5 +1,6 @@
 package com.tw.dddtw.domain;
 
+import com.tw.dddtw.Price;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -9,4 +10,5 @@ import lombok.Getter;
 @EqualsAndHashCode
 public class Product {
     private String name;
+    private Price price;
 }
